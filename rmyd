@@ -1,0 +1,19 @@
+#!/bin/bash
+
+BACKUP_DIRECTORY=${1:-/backup/}
+if [ -d ${BACKUP_DIRECTORY} ]; then
+	echo "You have chosen to restore a backup from ${BACKUP_DIRECTORY} - this is recommended to be done on a CLEAN filesystem with only the basic folder structure already existing (no extra files!)."
+	echo "The directory you have chosen will be excluded from the restoration, to prevent a never-ending loop."
+	echo "Please confirm by typing YES in capital letters. This will mirror the root filesystem with the backup, and delete all other files."
+	read prompt
+	if [ $prompt == "YES" ]; then
+		echo "If necessary, creating filesystem as appropriate"
+		sudo mkdir -p "/dev" "/proc" "/sys" "/tmp" "/run" "/mnt" "/media" "/lost+found"
+		echo "Restoring backup..."
+        	sudo rsync -aAXv ${BACKUP_DIRECTORY} --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found","${BACKUP_DIRECTORY}"} /
+	else
+		echo "Discarding job."
+	fi
+else
+	echo "${BACKUP_DIRECTORY} does not exist, exiting..."
+fi

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+BACKUP_DIRECTORY=${1:-/backup/}
+if [ -d ${BACKUP_DIRECTORY} ]; then
+	echo "You have chosen to backup to ${BACKUP_DIRECTORY}"
+	echo "The directory you have chosen will be excluded from the backup to prevent a never-ending loop."
+	echo "Please confirm by typing YES in capital letters. This will mirror the backup, and delete newly non-existent files."
+	read prompt
+	if [ $prompt == "YES" ]; then
+		echo "Backing directories up..."
+        	sudo rsync -aAXv / --exclude={"/dev","/dev/*","/proc","/proc/*","/sys","/sys/*","/tmp","/tmp/*","/run","/run/*","/mnt","/mnt/*","/media","/media/*","/lost+found","${BACKUP_DIRECTORY}"} --delete ${BACKUP_DIRECTORY}
+	else
+		echo "Discarding job."
+	fi
+else
+	echo "${BACKUP_DIRECTORY} does not exist, exiting..."
+fi
