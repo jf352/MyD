@@ -11,10 +11,10 @@ Just copy the files anywhere into your $PATH.
 
 To backup, call:
 
-bmd /path/to/backup/location/
+bmyd /path/to/backup/location/
 
 To restore, call:
 
-rmd /path/to/backup/location/
+rmyd /path/to/backup/location/
 
 You will be prompted with a confirmation (or a failure if the location doesn't already exist). Type "YES" to confirm.
